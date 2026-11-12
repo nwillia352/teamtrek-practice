@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Awareness Zone Sorter</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:16px;font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;line-height:1.45}
+  .wrap{max-width:760px;margin:0 auto}
+  h1{font-size:20px;color:#0057C2;margin:0 0 4px}
+  .sub{color:#384867;font-size:14px;margin:0 0 14px}
+  .box{background:#E3EBF5;border-left:4px solid #0057C2;padding:10px 14px;margin:0 0 14px;font-size:14px}
+  .box strong{color:#0057C2}
+  .card{border:1px solid #D8D6DE;padding:14px;margin-bottom:12px}
+  .beh{font-size:18px;font-weight:bold;margin:0 0 4px}
+  .count{font-size:13px;color:#384867;margin:0 0 10px}
+  .scores{display:flex;gap:18px;flex-wrap:wrap;font-size:15px;margin:0 0 10px}
+  .scores span b{color:#003087}
+  .line{position:relative;height:56px;margin:6px 10px 12px 10px}
+  .track{position:absolute;left:0;right:0;top:26px;height:4px;background:#D8D6DE}
+  .tick{position:absolute;top:34px;font-size:12px;color:#384867;transform:translateX(-50%)}
+  .five{position:absolute;top:10px;height:22px;width:0;border-left:2px dashed #003087}
+  .fivel{position:absolute;top:-4px;font-size:11px;color:#003087;transform:translateX(-50%);font-weight:bold}
+  .mk{position:absolute;top:19px;width:18px;height:18px;transform:translateX(-50%)}
+  .self{border:3px solid #5B6B8C;border-radius:50%;background:#fff}
+  .fp{background:#0057C2}
+  .legend{font-size:12px;color:#384867;display:flex;gap:16px;flex-wrap:wrap;margin:0 0 10px}
+  .legend i{display:inline-block;width:12px;height:12px;vertical-align:-1px;margin-right:5px}
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  button{font-family:inherit;font-size:15px;padding:11px 10px;border:1px solid #003087;background:#fff;color:#003087;cursor:pointer;font-weight:bold;text-align:left}
+  button:hover:not(:disabled){background:#E3EBF5}
+  button:focus-visible{outline:3px solid #0057C2;outline-offset:2px}
+  button:disabled{cursor:default;opacity:.75}
+  button.pri{background:#003087;color:#fff;text-align:center}
+  button.pri:hover{background:#0057C2}
+  button.sec{font-weight:normal;font-size:14px;padding:7px 10px}
+  .btns button.right{background:#E3EBF5;border:2px solid #003087;opacity:1}
+  .btns button.wrong{border:2px solid #B26A00;background:#FFF4E0;opacity:1}
+  .fb{margin-top:12px;padding:10px 14px;border-left:4px solid #0057C2;background:#E3EBF5;font-size:14px}
+  .fb.no{border-left-color:#B26A00;background:#FFF4E0}
+  .fb p{margin:0 0 6px}
+  .fb p:last-child{margin:0}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .hint{margin-top:10px;font-size:14px;display:none}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  th{background:#003087;color:#fff;text-align:left;padding:7px 9px;border:1px solid #D8D6DE}
+  td{padding:7px 9px;border:1px solid #D8D6DE;vertical-align:top}
+  tr:nth-child(even) td{background:#E3EBF5}
+  .done{text-align:center;padding:10px 0}
+  .big{font-size:28px;color:#003087;font-weight:bold}
+  @media(max-width:480px){.btns{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Awareness Zone Sorter</h1>
+  <p class="sub">A sample participant, invented for practice. For each behavior, choose the zone it lands in.</p>
+  <div class="box"><strong>Two questions decide the zone.</strong> Is The Full Picture 5.0 or higher? Is My Own View 1.25 or more away from The Full Picture? <button class="sec" id="toggleRules" type="button" style="margin-left:6px">Show the rules</button>
+    <div id="rules" class="hint">
+      <table>
+        <tr><th>Zone</th><th>What places a behavior here</th></tr>
+        <tr><td><b>Recognized Strength</b></td><td>The Full Picture is 5.0 or higher, and My Own View is within 1.25 of it.</td></tr>
+        <tr><td><b>Underestimated Strength</b></td><td>The Full Picture is 5.0 or higher, and My Own View is 1.25 or more below it.</td></tr>
+        <tr><td><b>Overestimated Behavior</b></td><td>My Own View is 1.25 or more above The Full Picture, whether The Full Picture is high or low.</td></tr>
+        <tr><td><b>Growth Priority</b></td><td>The Full Picture is below 5.0, and My Own View is within 1.25 of it.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="quiz">
+    <div class="card">
+      <p class="count" id="count"></p>
+      <p class="beh" id="beh"></p>
+      <div class="scores"><span>The Full Picture: <b id="fpv"></b></span><span>My Own View: <b id="sv"></b></span></div>
+      <div class="line" id="line" aria-hidden="true"></div>
+      <div class="legend"><span><i class="fp"></i>The Full Picture</span><span><i class="self" style="border-width:2px;border-radius:50%"></i>My Own View</span><span><i style="border-left:2px dashed #003087;width:0"></i>5.0 line</span></div>
+      <div class="btns" id="btns"></div>
+      <div class="fb" id="fb" style="display:none" aria-live="polite"></div>
+      <div class="row"><button class="pri" id="next" type="button" style="display:none"></button></div>
+    </div>
+  </div>
+
+  <div id="end" class="card done" style="display:none">
+    <p class="big" id="final"></p>
+    <p id="finalmsg"></p>
+    <button class="pri" id="again" type="button">Practice again</button>
+  </div>
+  <p class="sub">Practice only. Nothing here is scored or recorded.</p>
+</div>
+
+<script>
+const GAP = 1.25, LINE = 5.0;
+const ZONES = {
+  R:{name:"Recognized Strength",move:"Anchor it. This is real, it is theirs, and it is a foundation to build on."},
+  U:{name:"Underestimated Strength",move:"Help them see it. They are better at this than they think."},
+  O:{name:"Overestimated Behavior",move:"Surface it carefully. Direct, never accusing. Intent and impact are both real."},
+  G:{name:"Growth Priority",move:"Work on it together. The alignment is already there."}
+};
+const DATA = [
+  {"b":"Fulfills commitments","fp":6.3,"s":6},
+  {"b":"Provides appreciation and encouragement","fp":6.0,"s":4},
+  {"b":"Delegates effectively","fp":4.3,"s":6},
+  {"b":"Coaches for enhanced performance","fp":4.1,"s":4},
+  {"b":"Communicates an inspiring vision","fp":5.9,"s":7},
+  {"b":"Facilitates efficient and productive meetings","fp":5.4,"s":7},
+  {"b":"Seeks constructive feedback from others to understand blind spots","fp":5.8,"s":4},
+  {"b":"Takes initiative and acts decisively","fp":5.0,"s":5},
+  {"b":"Shares information with others","fp":4.9,"s":5},
+  {"b":"Develops strategies to accomplish organizational objectives","fp":4.4,"s":6}
+];
+function zoneOf(fp,s){
+  const diff = Math.round((s-fp)*100)/100; // positive = self higher
+  if (diff >= GAP) return "O";
+  if (-diff >= GAP) return fp >= LINE ? "U" : null;
+  return fp >= LINE ? "R" : "G";
+}
+function explain(d,z){
+  const diff = Math.round((d.s-d.fp)*100)/100, a = Math.abs(diff).toFixed(2).replace(/0$/,"");
+  const dir = diff>0 ? "self higher" : (diff<0 ? "self lower" : "no difference");
+  const lvl = d.fp>=LINE ? "The Full Picture ("+d.fp.toFixed(1)+") is 5.0 or higher" : "The Full Picture ("+d.fp.toFixed(1)+") is below 5.0";
+  const gapTxt = diff===0 ? "the two views match exactly" : (Math.abs(diff)>=GAP ? "the difference is "+a+" ("+dir+"), which is 1.25 or more" : "the difference is "+a+" ("+dir+"), which is under 1.25");
+  let why = lvl+", and "+gapTxt+".";
+  if (z==="O") why = "My Own View ("+d.s+") is "+a+" above The Full Picture ("+d.fp.toFixed(1)+"), which is 1.25 or more. Overestimated depends on the difference alone, so it does not matter that The Full Picture is "+(d.fp>=LINE?"5.0 or higher":"below 5.0")+".";
+  return why;
+}
+let i=0, right=0, answered=false;
+const $=id=>document.getElementById(id);
+function pos(v){return ((v-1)/6*100)+"%"}
+function drawLine(d){
+  let h='<div class="track"></div>';
+  for(let t=1;t<=7;t++) h+='<div class="tick" style="left:'+pos(t)+'">'+t+'</div>';
+  h+='<div class="five" style="left:'+pos(LINE)+'"></div><div class="fivel" style="left:'+pos(LINE)+'">5.0</div>';
+  h+='<div class="mk self" style="left:'+pos(d.s)+'" title="My Own View"></div>';
+  h+='<div class="mk fp" style="left:'+pos(d.fp)+'" title="The Full Picture"></div>';
+  $("line").innerHTML=h;
+}
+function show(){
+  const d=DATA[i]; answered=false;
+  $("count").textContent="Behavior "+(i+1)+" of "+DATA.length;
+  $("beh").textContent=d.b;
+  $("fpv").textContent=d.fp.toFixed(1);
+  $("sv").textContent=d.s.toFixed(1);
+  drawLine(d);
+  const b=$("btns"); b.innerHTML="";
+  Object.keys(ZONES).forEach(k=>{
+    const e=document.createElement("button"); e.type="button"; e.textContent=ZONES[k].name; e.dataset.k=k;
+    e.addEventListener("click",()=>choose(k)); b.appendChild(e);
+  });
+  $("fb").style.display="none"; $("next").style.display="none";
+}
+function choose(k){
+  if(answered) return; answered=true;
+  const d=DATA[i], z=zoneOf(d.fp,d.s), ok=(k===z);
+  if(ok) right++;
+  [...$("btns").children].forEach(e=>{
+    e.disabled=true;
+    if(e.dataset.k===z) e.classList.add("right");
+    else if(e.dataset.k===k) e.classList.add("wrong");
+  });
+  const fb=$("fb"); fb.className="fb"+(ok?"":" no"); fb.style.display="block";
+  fb.innerHTML='<p><b>'+(ok?"That is right. ":"Not quite. ")+ZONES[z].name+'.</b></p><p>'+explain(d,z)+'</p><p><b>Coaching move:</b> '+ZONES[z].move+'</p>';
+  const n=$("next"); n.textContent=(i===DATA.length-1)?"See your results":"Next behavior"; n.style.display="inline-block"; n.focus();
+}
+$("next").addEventListener("click",()=>{
+  if(i===DATA.length-1){ $("quiz").style.display="none"; $("end").style.display="block";
+    $("final").textContent=right+" of "+DATA.length+" in the right zone";
+    $("finalmsg").textContent= right>=9 ? "You have the two numbers down: 5.0 and 1.25." : (right>=6 ? "Good. Re-read the rules and try the ones you missed." : "Keep the two questions in front of you: is The Full Picture 5.0 or higher, and is the difference 1.25 or more?");
+  } else { i++; show(); }
+});
+$("again").addEventListener("click",()=>{ i=0; right=0; $("end").style.display="none"; $("quiz").style.display="block"; show(); });
+$("toggleRules").addEventListener("click",()=>{
+  const r=$("rules"), on=r.style.display==="block"; r.style.display=on?"none":"block";
+  $("toggleRules").textContent=on?"Show the rules":"Hide the rules";
+});
+show();
+</script>
+</body>
+</html>

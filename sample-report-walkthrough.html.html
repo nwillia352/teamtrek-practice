@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Report Walkthrough: TTLP</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:14px;font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;line-height:1.45;font-size:15px}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-size:21px;color:#0057C2;margin:0}
+.sub{color:#384867;font-size:13px;margin:2px 0 10px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.sw{font-size:14px;display:flex;align-items:center;gap:8px;border:1px solid #003087;padding:7px 10px;background:#fff;cursor:pointer}
+.sw input{width:18px;height:18px;accent-color:#003087}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.steps button{font-family:inherit;font-size:13px;padding:6px 9px;border:1px solid #003087;background:#fff;color:#003087;cursor:pointer}
+.steps button.on{background:#003087;color:#fff}
+.steps button:focus-visible,.nav button:focus-visible,.look:focus-visible,.link:focus-visible{outline:3px solid #0057C2;outline-offset:2px}
+.guide{background:#E3EBF5;border-left:4px solid #0057C2;padding:12px 16px;margin-bottom:12px}
+.guide h2{font-size:17px;color:#0057C2;margin:0 0 6px}
+.guide p{margin:0 0 8px;font-size:14px}
+.guide ol{margin:4px 0 10px;padding-left:22px}
+.guide li{margin:0 0 5px;font-size:14px}
+.look{font-family:inherit;font-size:14px;text-align:left;background:none;border:0;border-bottom:1px dashed #0057C2;color:#003087;cursor:pointer;padding:0}
+.look:hover{background:#fff}
+.lab{font-weight:bold;color:#0057C2}
+.nav{display:flex;justify-content:space-between;margin:10px 0}
+.nav button{font-family:inherit;font-size:14px;padding:9px 16px;border:1px solid #003087;background:#003087;color:#fff;cursor:pointer;font-weight:bold}
+.nav button:disabled{opacity:.35;cursor:default}
+.page{border:1px solid #D8D6DE;background:#fff}
+.rh{background:#003087;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;letter-spacing:.3px}
+.pb{padding:16px}
+.sec{font-size:18px;color:#0057C2;margin:0 0 10px;border-bottom:2px solid #0057C2;padding-bottom:4px}
+h3{font-size:15px;color:#003087;margin:16px 0 6px}
+.ov{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 8px}
+th{background:#003087;color:#fff;text-align:left;padding:6px 8px;border:1px solid #D8D6DE;font-weight:bold;white-space:nowrap}
+td{padding:6px 8px;border:1px solid #D8D6DE;vertical-align:top}
+tbody tr:nth-child(even) td{background:#E3EBF5}
+td.n,th.n{text-align:center}
+tr.tot td{font-weight:bold}
+.cap{margin-bottom:6px}
+.capd{font-size:13px;color:#384867;margin:0 0 4px;font-style:italic}
+.A{color:#1E7B34;font-weight:bold}.T{color:#5B6B8C;font-weight:bold}.B{color:#B26A00;font-weight:bold}
+.hl{outline:3px solid #0057C2;outline-offset:2px;background:#FFF9D6 !important}
+tr.hl td{background:#FFF9D6 !important}
+.zone{border:1px solid #D8D6DE;margin:0 0 10px}
+.zh{padding:7px 12px;color:#fff;font-weight:bold;font-size:14px}
+.z-R .zh{background:#003087}.z-U .zh{background:#0057C2}.z-O .zh{background:#B26A00}.z-G .zh{background:#5B6B8C}
+.zi{padding:6px 12px;border-top:1px solid #E3EBF5;font-size:13px}
+.zi small{display:block;color:#384867}
+.zn{padding:8px 12px;font-size:13px;color:#384867}
+.more{font-family:inherit;font-size:13px;margin:8px 12px;padding:5px 10px;border:1px solid #003087;background:#fff;color:#003087;cursor:pointer}
+details{border:1px solid #D8D6DE;margin:0 0 8px}
+summary{cursor:pointer;padding:7px 10px;font-weight:bold;font-size:13px;background:#E3EBF5;color:#003087}
+details table{margin:0}
+.ex{display:flex;gap:6px;margin:0 0 8px}
+.ex button,.more{font-family:inherit}
+.q{margin:0 0 14px}.q h3{margin-top:12px}
+.cm{border-left:3px solid #D8D6DE;padding:4px 10px;margin:0 0 6px;font-size:13px}
+.cm.me{border-left-color:#0057C2;background:#E3EBF5}
+.sp{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border:1px solid #D8D6DE;margin:0 0 5px;font-size:13px;flex-wrap:wrap}
+.sp small{display:block;color:#384867}
+.cover{text-align:center;padding:22px 8px}
+.cover h2{font-size:26px;color:#003087;margin:6px 0}
+.cover p{margin:2px 0;color:#384867}
+.cover ul{list-style:none;padding:0;margin:16px auto 0;max-width:420px;text-align:left}
+.cover li{margin:0 0 6px}
+.link{font-family:inherit;font-size:14px;background:none;border:0;color:#0057C2;text-decoration:underline;cursor:pointer;padding:0}
+.legend{font-size:12px;color:#384867}
+.hint{font-size:12px;color:#384867;margin:4px 0}
+@media(max-width:560px){body{padding:8px}.pb{padding:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <div><h1>Sample Report Walkthrough: TTLP</h1><p class="sub" style="margin:0">An invented participant and invented scores, shown in the layout of a real report.</p></div>
+  <label class="sw"><input type="checkbox" id="bm"> Benchmark on</label>
+</div>
+<div class="steps" id="steps" role="tablist"></div>
+<div class="guide" id="guide" aria-live="polite"></div>
+<div class="nav"><button id="back1" type="button">Back</button><button id="next1" type="button">Next</button></div>
+<div class="page"><div class="rh"><span>TEAM TREK &middot; LEADERSHIP PROFILE &middot; 360&deg;</span><span>Jordan Sample &middot; Sample Organization &middot; SAMPLE REPORT, INVENTED FOR TRAINING</span></div><div class="pb" id="page"></div></div>
+<div class="nav"><button id="back2" type="button">Back</button><button id="next2" type="button">Next</button></div>
+</div>
+<script>
+const D = {"rows":[{"id":1,"t":"Demonstrates 100% Responsibility with no excuses, blaming or rationalizing","c":0,"cl":"Character & Consistency","s":6,"L":6.5,"T":6.1667,"S":6.75,"bm":5.5,"z":"R"},{"id":3,"t":"Takes responsibility for how own behaviors impact others","c":0,"cl":"Character & Consistency","s":6,"L":6.0,"T":5.3333,"S":6.5,"bm":5.7,"z":"R"},{"id":4,"t":"Acts with honesty and integrity","c":0,"cl":"Character & Consistency","s":7,"L":6.5,"T":6.3333,"S":7,"bm":5.8,"z":"R"},{"id":5,"t":"Models organizational values and purpose","c":0,"cl":"Character & Consistency","s":6,"L":6.5,"T":5.8333,"S":6.5,"bm":5.6,"z":"R"},{"id":6,"t":"Fulfills commitments","c":0,"cl":"Character & Consistency","s":7,"L":6.5,"T":5.6667,"S":7,"bm":5.9,"z":"R"},{"id":2,"t":"Admits mistakes and learns from them","c":0,"cl":"Growth Orientation","s":6,"L":6.0,"T":5.6667,"S":6.5,"bm":5.8,"z":"R"},{"id":8,"t":"Seeks constructive feedback from others to understand blind spots","c":0,"cl":"Growth Orientation","s":4,"L":5.5,"T":4.8333,"S":6.0,"bm":5.4,"z":"U"},{"id":9,"t":"Compensates for own weaknesses","c":0,"cl":"Growth Orientation","s":5,"L":5.5,"T":5.3333,"S":6.0,"bm":5.8,"z":"R"},{"id":10,"t":"Is an active learner","c":0,"cl":"Growth Orientation","s":6,"L":6.5,"T":5.6667,"S":6.75,"bm":5.6,"z":"R"},{"id":7,"t":"Is punctual","c":0,"cl":"Personal Effectiveness","s":7,"L":6.0,"T":5.8333,"S":6.5,"bm":5.9,"z":"R"},{"id":11,"t":"Resolves conflict quickly, directly and professionally","c":0,"cl":"Personal Effectiveness","s":5,"L":6.0,"T":5.5,"S":6.5,"bm":5.7,"z":"R"},{"id":12,"t":"Maintains emotional self-control","c":0,"cl":"Personal Effectiveness","s":6,"L":6.5,"T":5.8333,"S":7,"bm":5.5,"z":"R"},{"id":13,"t":"Demonstrates courage and takes healthy risks","c":0,"cl":"Resilience & Courage","s":6,"L":5.5,"T":5.3333,"S":6.25,"bm":5.6,"z":"R"},{"id":14,"t":"Demonstrates self-confidence","c":0,"cl":"Resilience & Courage","s":4,"L":6.5,"T":5.5,"S":6.5,"bm":5.9,"z":"U"},{"id":15,"t":"Displays optimism combined with realism","c":0,"cl":"Resilience & Courage","s":6,"L":6.5,"T":5.8333,"S":6.5,"bm":6.0,"z":"R"},{"id":16,"t":"Perseveres through adversity and change","c":0,"cl":"Resilience & Courage","s":6,"L":6.5,"T":5.8333,"S":7,"bm":5.7,"z":"R"},{"id":17,"t":"Builds high-trust relationships","c":1,"cl":"Trust & Respect","s":6,"L":6.5,"T":6.1667,"S":6.75,"bm":6.2,"z":"R"},{"id":18,"t":"Treats other team members or colleagues with respect","c":1,"cl":"Trust & Respect","s":7,"L":6.5,"T":6.3333,"S":7,"bm":6.0,"z":"R"},{"id":21,"t":"Acts with clear intent","c":1,"cl":"Trust & Respect","s":6,"L":6.5,"T":5.3333,"S":7,"bm":5.7,"z":"R"},{"id":24,"t":"Extends trust to others","c":1,"cl":"Trust & Respect","s":6,"L":6.5,"T":6.1667,"S":7,"bm":6.1,"z":"R"},{"id":19,"t":"Actively listens for understanding without distractions, interruptions or sidebars","c":1,"cl":"Empathy & Communication","s":6,"L":6.0,"T":5.3333,"S":7,"bm":5.9,"z":"R"},{"id":20,"t":"Demonstrates empathy by seeking to understand the perspective of others","c":1,"cl":"Empathy & Communication","s":7,"L":6.0,"T":5.6667,"S":6.75,"bm":6.2,"z":"R"},{"id":28,"t":"Takes time to communicate why a job or task is important","c":1,"cl":"Empathy & Communication","s":7,"L":5.5,"T":4.8333,"S":6.25,"bm":6.0,"z":"O"},{"id":27,"t":"Communicates an inspiring vision","c":1,"cl":"Empathy & Communication","s":6,"L":6.0,"T":5.3333,"S":6.0,"bm":5.8,"z":"R"},{"id":22,"t":"Sees and communicates the potential in others","c":1,"cl":"Recognition & Development","s":6,"L":6.5,"T":5.8333,"S":7,"bm":5.8,"z":"R"},{"id":23,"t":"Challenges others to be better","c":1,"cl":"Recognition & Development","s":7,"L":5.5,"T":4.5,"S":6.0,"bm":6.0,"z":"O"},{"id":25,"t":"Provides appreciation and encouragement","c":1,"cl":"Recognition & Development","s":4,"L":6.0,"T":5.6667,"S":6.5,"bm":6.1,"z":"U"},{"id":26,"t":"Celebrates individual and team success","c":1,"cl":"Recognition & Development","s":6,"L":6.0,"T":5.6667,"S":7,"bm":6.0,"z":"R"},{"id":29,"t":"Communicates clear expectations for attitude and behavior","c":2,"cl":"Clarity & Expectations","s":6,"L":5.5,"T":4.3333,"S":6.0,"bm":5.9,"z":"R"},{"id":31,"t":"Communicates clear expectations for job performance and results","c":2,"cl":"Clarity & Expectations","s":6,"L":5.0,"T":4.0,"S":6.5,"bm":5.7,"z":"R"},{"id":36,"t":"Provides clear, specific feedback in a timely manner","c":2,"cl":"Clarity & Expectations","s":5,"L":5.0,"T":4.0,"S":5.5,"bm":5.4,"z":"G"},{"id":30,"t":"Coaches for attitude and behavior","c":2,"cl":"Development & Delegation","s":5,"L":5.0,"T":4.0,"S":6.25,"bm":5.8,"z":"G"},{"id":32,"t":"Coaches for enhanced performance","c":2,"cl":"Development & Delegation","s":4,"L":4.5,"T":3.5,"S":6.25,"bm":5.6,"z":"G"},{"id":33,"t":"Delegates effectively","c":2,"cl":"Development & Delegation","s":6,"L":4.5,"T":3.5,"S":5.5,"bm":5.9,"z":"O"},{"id":34,"t":"Develops others' leadership skills","c":2,"cl":"Development & Delegation","s":5,"L":5.0,"T":3.8333,"S":6.25,"bm":5.7,"z":"G"},{"id":35,"t":"Sees and communicates blind spots and areas of struggle for others","c":2,"cl":"Accountability","s":5,"L":4.5,"T":3.6667,"S":5.75,"bm":5.5,"z":"G"},{"id":45,"t":"Holds others accountable for their commitments","c":2,"cl":"Accountability","s":4,"L":4.5,"T":3.3333,"S":6.0,"bm":5.5,"z":"G"},{"id":37,"t":"When coaching is not successful, removes non-producing people from the team","c":2,"cl":"Accountability","s":4,"L":5.0,"T":4.6667,"S":6.5,"bm":5.7,"z":"U"},{"id":38,"t":"Develops and communicates a clear and simple mission for the team","c":3,"cl":"Mission & Alignment","s":6,"L":5.5,"T":4.6667,"S":5.75,"bm":5.6,"z":"R"},{"id":39,"t":"Builds individual commitment to decisions, objectives, purpose and vision","c":3,"cl":"Mission & Alignment","s":6,"L":5.0,"T":4.3333,"S":6.25,"bm":5.3,"z":"R"},{"id":40,"t":"Commits to team decisions and objectives","c":3,"cl":"Mission & Alignment","s":6,"L":6.0,"T":5.5,"S":6.75,"bm":5.8,"z":"R"},{"id":41,"t":"Communicates clearly in a direct, non-fuzzy manner","c":3,"cl":"Communication & Inclusion","s":6,"L":5.5,"T":4.8333,"S":6.75,"bm":5.5,"z":"R"},{"id":42,"t":"Makes clear and specific agreements with others","c":3,"cl":"Communication & Inclusion","s":5,"L":5.5,"T":5.0,"S":6.25,"bm":5.3,"z":"R"},{"id":43,"t":"Shares information with others","c":3,"cl":"Communication & Inclusion","s":5,"L":5.0,"T":4.1667,"S":6.0,"bm":5.6,"z":"G"},{"id":44,"t":"Fosters a safe environment for everyone to be heard","c":3,"cl":"Communication & Inclusion","s":7,"L":6.5,"T":5.8333,"S":7,"bm":5.4,"z":"R"},{"id":45,"t":"Holds others accountable for their commitments","c":3,"cl":"Team Dynamics & Leadership","s":4,"L":4.5,"T":3.8333,"S":5.25,"bm":5.6,"z":"G"},{"id":46,"t":"Facilitates efficient and productive meetings","c":3,"cl":"Team Dynamics & Leadership","s":7,"L":5.5,"T":4.6667,"S":6.5,"bm":5.4,"z":"O"},{"id":47,"t":"Facilitates win/win solutions","c":3,"cl":"Team Dynamics & Leadership","s":6,"L":5.5,"T":5.0,"S":6.25,"bm":5.3,"z":"R"},{"id":48,"t":"Flexes leadership style depending upon the situation","c":3,"cl":"Team Dynamics & Leadership","s":6,"L":5.5,"T":4.6667,"S":6.25,"bm":5.2,"z":"R"},{"id":49,"t":"Challenges assumptions and thinks out-of-the-box","c":4,"cl":"Mindset & Initiative","s":6,"L":5.5,"T":4.8333,"S":6.25,"bm":5.6,"z":"R"},{"id":50,"t":"Takes initiative and acts decisively","c":4,"cl":"Mindset & Initiative","s":5,"L":5.5,"T":4.3333,"S":6.0,"bm":5.8,"z":"R"},{"id":51,"t":"Supports and leads change","c":4,"cl":"Mindset & Initiative","s":6,"L":5.0,"T":4.8333,"S":5.75,"bm":5.6,"z":"R"},{"id":55,"t":"Does not accept excuses as a substitute for results","c":4,"cl":"Mindset & Initiative","s":4,"L":4.5,"T":4.1667,"S":6.0,"bm":5.9,"z":"G"},{"id":52,"t":"Exhibits competence while leveraging own strengths","c":4,"cl":"People & Resources","s":6,"L":6.0,"T":5.0,"S":7,"bm":5.7,"z":"R"},{"id":53,"t":"Places right people in the right roles","c":4,"cl":"People & Resources","s":6,"L":5.5,"T":4.8333,"S":6.0,"bm":5.4,"z":"R"},{"id":54,"t":"Rewards desired behaviors and results","c":4,"cl":"People & Resources","s":6,"L":6.0,"T":4.8333,"S":6.5,"bm":5.7,"z":"R"},{"id":59,"t":"Effective steward of organizational resources","c":4,"cl":"People & Resources","s":7,"L":6.0,"T":5.3333,"S":6.75,"bm":5.7,"z":"R"},{"id":56,"t":"Develops strategies to accomplish organizational objectives","c":4,"cl":"Strategy & Execution","s":6,"L":4.5,"T":4.1667,"S":6.0,"bm":5.9,"z":"G"},{"id":57,"t":"Uses data to make decisions and measure results","c":4,"cl":"Strategy & Execution","s":5,"L":6.0,"T":5.1667,"S":5.75,"bm":5.6,"z":"R"},{"id":58,"t":"Builds on and leverages organizational strengths","c":4,"cl":"Strategy & Execution","s":6,"L":5.5,"T":4.8333,"S":6.25,"bm":5.5,"z":"R"},{"id":61,"t":"Sees blind spots and areas of struggle of the organization","c":4,"cl":"Strategy & Execution","s":5,"L":5.5,"T":4.3333,"S":6.25,"bm":5.4,"z":"R"},{"id":62,"t":"Sees possibilities and strengths of the organization","c":4,"cl":"Customer & Organizational Focus","s":7,"L":6.0,"T":5.3333,"S":6.75,"bm":5.7,"z":"R"},{"id":63,"t":"Understands what drives the economic engine of the organization","c":4,"cl":"Customer & Organizational Focus","s":5,"L":5.5,"T":5.0,"S":6.75,"bm":5.8,"z":"R"},{"id":64,"t":"Effectively navigates internal politics of organization","c":4,"cl":"Customer & Organizational Focus","s":5,"L":6.0,"T":5.0,"S":6.0,"bm":5.6,"z":"R"},{"id":65,"t":"Committed to delivering a high level of value for the customer","c":4,"cl":"Customer & Organizational Focus","s":6,"L":6.5,"T":5.5,"S":7,"bm":6.0,"z":"R"},{"id":60,"t":"Places organization goals above individual or department goals","c":4,"cl":"Customer & Organizational Focus","s":6,"L":5.5,"T":5.0,"S":6.0,"bm":5.6,"z":"R"}],"caps":["Models the Way","Influences the Heart","Coaches Others","Leads High Performing Teams","Gets Results"],"capdesc":["Personal character, integrity, self-awareness, and ability to model the behaviors expected of others","Building trust, inspiring others, and influencing without positional authority","Setting standards, developing people, and giving honest feedback","Building cohesion, enabling collaboration, and aligning people around a common purpose","Delivering on the mission, driving contribution, and creating organizational value"]};
+const W={L:2,T:6,S:4}, GAP=1.25, LINE=5.0;
+const r1=x=>parseFloat(x.toFixed(1));
+const fpRaw=r=>(W.L*r.L+W.T*r.T+W.S*r.S)/12;
+const fp=r=>r1(fpRaw(r));
+function zone(r){const f=fp(r),d=Math.round((r.s-f)*100)/100;
+  if(d>=GAP) return "O"; if(-d>=GAP) return f>=LINE?"U":"?"; return f>=LINE?"R":"G";}
+function ind(a,b){const d=Math.round((r1(a)-r1(b))*100)/100; return d>0.3?"A":(d<-0.3?"B":"T");}
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+
+
+const CAPS=D.caps, CAPD=D.capdesc, rows=D.rows;
+const U=[...new Map(rows.map(r=>[r.id,r])).values()];
+const ZN={R:"Recognized Strength",U:"Underestimated Strength",O:"Overestimated Behavior",G:"Growth Priority"};
+const ZH={R:"Recognized Strengths",U:"Underestimated Strengths",O:"Overestimated Behaviors",G:"Growth Priorities"};
+const f1=x=>parseFloat(x.toFixed(1)).toFixed(1);
+const IND={A:'<span class="A">&uarr; Above</span>',T:'<span class="T">&ndash; At</span>',B:'<span class="B">&darr; Below</span>'};
+let BM=false;
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+// aggregates
+function grp(a){return {s:mean(a.map(r=>r.s)),L:mean(a.map(r=>r.L)),T:mean(a.map(r=>r.T)),S:mean(a.map(r=>r.S)),fp:mean(a.map(fpRaw)),bm:mean(a.map(r=>r.bm))}}
+const capG=CAPS.map((n,c)=>grp(rows.filter(r=>r.c===c)));
+const clusters=[]; rows.forEach(r=>{if(!clusters.find(k=>k.c===r.c&&k.cl===r.cl))clusters.push({c:r.c,cl:r.cl})});
+clusters.forEach(k=>{k.g=grp(rows.filter(r=>r.c===k.c&&r.cl===k.cl));k.rows=rows.filter(r=>r.c===k.c&&r.cl===k.cl)});
+const bmH=()=>BM?'<th class="n">Benchmark</th><th class="n">Indicator</th>':'';
+const bmC=(f,b)=>BM?'<td class="n">'+f1(b)+'</td><td class="n">'+IND[ind(f,b)]+'</td>':'';
+// ---------- sections
+function cover(){
+ return '<div class="cover"><p>TEAM TREK</p><h2>Leadership Profile 360&deg;</h2><p><b>Jordan Sample</b></p><p>Sample Organization</p><p style="margin-top:10px">A sample report. The participant, the raters, the scores, and the comments are all invented.</p>'+
+ '<ul><li><button class="link" data-go="1">Section 1 &mdash; Participant Overview</button></li><li><button class="link" data-go="2">Section 2 &mdash; Awareness Zones</button></li><li><button class="link" data-go="3">Section 3 &mdash; Capacity &amp; Cluster Summary</button></li><li><button class="link" data-go="4">Section 4 &mdash; Spotlight Items</button></li><li><button class="link" data-go="5">Section 5 &mdash; Item Detail</button></li><li><button class="link" data-go="6">Section 6 &mdash; Open-Ended Commentary</button></li></ul></div>';
+}
+function overview(){
+ const V=[["My Own View","1","1","100%",null],["My Leader's View","2","2","100%","L"],["My Team's View","7","6","86%","T"],["My Stakeholders' View","5","4","80%","S"]];
+ let h='<h2 class="sec">Section 1 &mdash; Participant Overview</h2>';
+ h+='<div class="ov"><table data-hl="a1"><thead><tr><th>Assessment Date</th><th class="n">Raters Invited</th><th class="n">Raters Responded</th><th class="n">Response Rate</th><th class="n">Rating Scale</th></tr></thead><tbody><tr><td>November 2026</td><td class="n">14</td><td class="n">12</td><td class="n">86%</td><td class="n">1 &ndash; 7</td></tr></tbody></table></div>';
+ h+='<h3>Assessment Summary</h3><div class="ov"><table data-hl="a1b"><thead><tr><th>Rater Group</th><th class="n">Nominated</th><th class="n">Responded</th><th class="n">Response Rate</th><th class="n">Overall Avg.</th></tr></thead><tbody>';
+ V.forEach(v=>{h+='<tr><td>'+v[0]+'</td><td class="n">'+v[1]+'</td><td class="n">'+v[2]+'</td><td class="n">'+v[3]+'</td><td class="n">'+(v[4]?f1(mean(U.map(r=>r[v[4]]))):"&mdash;")+'</td></tr>'});
+ h+='<tr class="tot"><td>The Full Picture</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="n">'+f1(mean(U.map(fpRaw)))+'</td></tr></tbody></table></div>';
+ h+='<h3>Overall Score by Capacity</h3><div class="ov"><table data-hl="a2"><thead><tr><th>Capacity</th><th class="n">My Own View</th><th class="n">My Leader\'s View</th><th class="n">My Team\'s View</th><th class="n">My Stakeholders\' View</th><th class="n">The Full Picture</th>'+bmH()+'</tr></thead><tbody>';
+ CAPS.forEach((n,c)=>{const g=capG[c];h+='<tr data-hl="a3-'+c+'"><td><b>'+n+'</b></td><td class="n">'+f1(g.s)+'</td><td class="n">'+f1(g.L)+'</td><td class="n">'+f1(g.T)+'</td><td class="n">'+f1(g.S)+'</td><td class="n"><b>'+f1(g.fp)+'</b></td>'+bmC(g.fp,g.bm)+'</tr>'});
+ return h+'</tbody></table></div>';
+}
+function zones(){
+ const L={R:[],U:[],O:[],G:[]}; U.forEach(r=>L[zone(r)].push(r));
+ L.R.sort((a,b)=>fp(b)-fp(a)||a.id-b.id); ["U","O","G"].forEach(k=>L[k].sort((a,b)=>fp(b)-fp(a)||a.id-b.id));
+ let h='<h2 class="sec">Section 2 &mdash; Awareness Zones</h2><p class="hint">Items are placed into one of four zones based on the relationship between My Own View and The Full Picture. A difference of 1.25 or more on the 1&ndash;7 scale triggers zone placement.</p>';
+ ["R","U","O","G"].forEach(k=>{
+  const a=L[k]; const lim=(k==="R"?5:a.length);
+  h+='<div class="zone z-'+k+'" data-hl="z-'+k+'"><div class="zh">'+ZH[k]+' ('+a.length+')</div>';
+  if(!a.length) h+='<div class="zn">No behaviors in this zone for this assessment.</div>';
+  a.forEach((r,i)=>{const d=Math.round((r.s-fp(r))*100)/100;
+   const dt=d===0?"views match":("self "+Math.abs(d).toFixed(1)+(d>0?" higher":" lower"));
+   h+='<div class="zi'+(i>=lim?' hid':'')+'" '+(i>=lim?'style="display:none"':'')+'>'+esc(r.t)+'<small>The Full Picture: '+f1(fp(r))+' &middot; My Own View: '+r.s+' &middot; '+dt+'</small></div>';});
+  if(k==="R"&&a.length>5) h+='<button class="more" type="button" id="moreR">Show all '+a.length+'</button>';
+  h+='</div>';});
+ return h;
+}
+function clusterSummary(){
+ let h='<h2 class="sec">Section 3 &mdash; Capacity &amp; Cluster Summary</h2><p class="hint">The Full Picture score is shown for each capacity and its behavioral clusters.</p>';
+ CAPS.forEach((n,c)=>{
+  h+='<div class="cap"><h3>'+n+'</h3><p class="capd">'+CAPD[c]+'</p><div class="ov"><table><thead><tr><th>Cluster</th><th class="n">The Full Picture</th>'+bmH()+'<th class="n">My Leader\'s View</th><th class="n">My Team\'s View</th><th class="n">My Stakeholders\' View</th><th class="n">My Own View</th></tr></thead><tbody>';
+  const g=capG[c];
+  h+='<tr class="tot" data-hl="c1-'+c+'"><td>Overall</td><td class="n">'+f1(g.fp)+'</td>'+bmC(g.fp,g.bm)+'<td class="n">'+f1(g.L)+'</td><td class="n">'+f1(g.T)+'</td><td class="n">'+f1(g.S)+'</td><td class="n">'+f1(g.s)+'</td></tr>';
+  clusters.filter(k=>k.c===c).forEach(k=>{const q=k.g;
+   h+='<tr data-hl="c2-'+c+'-'+k.cl.replace(/\W/g,"")+'"><td>'+esc(k.cl)+'</td><td class="n">'+f1(q.fp)+'</td>'+bmC(q.fp,q.bm)+'<td class="n">'+f1(q.L)+'</td><td class="n">'+f1(q.T)+'</td><td class="n">'+f1(q.S)+'</td><td class="n">'+f1(q.s)+'</td></tr>';});
+  h+='</tbody></table></div></div>';});
+ return h;
+}
+function tag(r){return ZN[zone(r)]+" &middot; ["+CAPS[r.c]+" &middot; "+esc(r.cl)+"]"}
+function spotlight(){
+ const s=U.slice().sort((a,b)=>fp(b)-fp(a)||a.id-b.id), hi=s.slice(0,5), lo=s.slice(-5).reverse();
+ const row=r=>'<div class="sp" data-hl="sp-'+r.id+'"><div>'+esc(r.t)+'<small>'+tag(r)+'</small></div><div style="text-align:right"><b>'+f1(fp(r))+'</b>'+(BM?'<small>Benchmark '+f1(r.bm)+' &nbsp;'+IND[ind(fpRaw(r),r.bm)]+'</small>':'')+'</div></div>';
+ return '<h2 class="sec">Section 4 &mdash; Spotlight Items</h2><p class="hint">The five highest-rated and five lowest-rated behaviors based on The Full Picture.</p><h3>Highest Rated &mdash; Your Most Visible Strengths</h3><div data-hl="d1">'+hi.map(row).join("")+'</div><h3>Lowest Rated &mdash; Your Clearest Development Opportunities</h3><div data-hl="d2">'+lo.map(row).join("")+'</div>';
+}
+function itemDetail(){
+ let h='<h2 class="sec">Section 5 &mdash; Item Detail</h2><p class="hint">Full item-level scores by view across all 65 behaviors and all five capacities.</p><div class="ex"><button class="more" type="button" id="exp" style="margin:0">Expand all</button><button class="more" type="button" id="col" style="margin:0">Collapse all</button></div>';
+ CAPS.forEach((n,c)=>{
+  h+='<h3>'+n+'</h3>';
+  clusters.filter(k=>k.c===c).forEach(k=>{
+   const open=(c===2)?' open':'';
+   h+='<details'+open+' data-hl="e1-'+c+'-'+k.cl.replace(/\W/g,"")+'"><summary>'+esc(k.cl)+'</summary><div class="ov"><table><thead><tr><th>Behavior</th><th class="n">The Full Picture</th>'+bmH()+'<th class="n">My Leader\'s View</th><th class="n">My Team\'s View</th><th class="n">My Stakeholders\' View</th><th class="n">My Own View</th></tr></thead><tbody>';
+   k.rows.forEach(r=>{h+='<tr data-hl="r-'+r.id+(r.id===45?' e3':'')+'"><td>'+esc(r.t)+'</td><td class="n"><b>'+f1(fp(r))+'</b></td>'+bmC(fpRaw(r),r.bm)+'<td class="n">'+f1(r.L)+'</td><td class="n">'+f1(r.T)+'</td><td class="n">'+f1(r.S)+'</td><td class="n">'+r.s+'</td></tr>'});
+   h+='</tbody></table></div></details>';});});
+ return h;
+}
+const QS=[
+ ["When this person is at their best, what does that look like, and what impact does it have on the people around them or the work?",[
+  "Jordan is at their best in the room with the team. People feel heard, and the conversation gets honest quickly. That makes it easier for everyone to bring real problems forward.",
+  "When a project is stuck, Jordan stays calm and keeps everyone focused on what we can control. The team settles down and starts solving.",
+  "Warm, approachable, and genuinely interested in people. New team members feel welcome right away.",
+  "Jordan brings a steady presence when things get hard. I have seen it carry the whole team through a difficult quarter.",
+  "NA","I do not work with Jordan closely enough to say."],
+  "At my best I am listening closely, helping people see what is possible, and keeping the team calm under pressure."],
+ ["What one thing, if they made this an area of focused effort, would most accelerate their growth and effectiveness over the next year?",[
+  "Setting clear expectations early, and following up when they are missed.",
+  "Giving more direct feedback, even when it is uncomfortable. People want to know where they stand.",
+  "Handing off more of the work. Jordan sometimes takes on tasks the team could own.",
+  "Being clearer about priorities so the team knows what matters most this quarter.",
+  "More time spent developing people for their next role.","NA"],
+  "I would benefit from slowing down and holding people accountable more consistently, even when it is hard."],
+ ["As this person continues to grow in their role, what quality or behavior should they make sure never to lose?",[
+  "The way Jordan makes people feel valued. Please never lose that.","Calm under pressure.","Honesty and genuine care for the team.","Willingness to listen before deciding.","A sense of humor that keeps the team connected."],
+  "My care for people and my curiosity."]
+];
+function comments(){
+ let h='<h2 class="sec">Section 6 &mdash; Open-Ended Commentary</h2><p class="hint">Responses are presented exactly as entered and grouped by question. They are not attributed.</p>';
+ QS.forEach((q,i)=>{h+='<div class="q" data-hl="f'+(i+1)+'"><h3>'+q[0]+'</h3>'+q[1].map(t=>'<div class="cm"'+((t==="NA"||t.indexOf("I do not work")===0)?' data-hl="fs"':'')+'>'+esc(t)+'</div>').join("")+'<div class="cm me" data-hl="f4"><b>Participant\'s own answer:</b> '+esc(q[2])+'</div></div>'});
+ return h;
+}
+function benchmark(){
+ const ex=U.filter(r=>zone(r)==="R"&&ind(fpRaw(r),r.bm)==="B").slice(0,3);
+ let h='<h2 class="sec">The Benchmark</h2><h3>Where it appears</h3><div class="ov"><table data-hl="g0"><thead><tr><th>Section</th><th class="n">Shows the benchmark?</th></tr></thead><tbody>';
+ [["1 Participant Overview","Yes"],["2 Awareness Zones","No"],["3 Capacity & Cluster Summary","Yes"],["4 Spotlight Items","Yes"],["5 Item Detail","Yes"],["6 Open-Ended Commentary","No"]].forEach(a=>{h+='<tr><td>'+esc(a[0])+'</td><td class="n"><b>'+a[1]+'</b></td></tr>'});
+ h+='</tbody></table></div><h3>The three indicators</h3><div class="ov"><table data-hl="g1"><thead><tr><th>Indicator</th><th>When it applies</th></tr></thead><tbody><tr><td>'+IND.A+'</td><td>The Full Picture is more than 0.3 above the benchmark</td></tr><tr><td>'+IND.T+'</td><td>The Full Picture is within 0.3 of the benchmark</td></tr><tr><td>'+IND.B+'</td><td>The Full Picture is more than 0.3 below the benchmark</td></tr></tbody></table></div>';
+ h+='<h3>Overall score by capacity, with the benchmark on</h3><div class="ov"><table data-hl="g2"><thead><tr><th>Capacity</th><th class="n">The Full Picture</th><th class="n">Benchmark</th><th class="n">Indicator</th></tr></thead><tbody>';
+ CAPS.forEach((n,c)=>{const g=capG[c];h+='<tr><td><b>'+n+'</b></td><td class="n">'+f1(g.fp)+'</td><td class="n">'+f1(g.bm)+'</td><td class="n">'+IND[ind(g.fp,g.bm)]+'</td></tr>'});
+ h+='</tbody></table></div><h3>Same behavior, two lenses</h3><p class="hint">Each of these is a Recognized Strength in Section 2, and each sits Below the benchmark.</p><div class="ov"><table data-hl="g3"><thead><tr><th>Behavior</th><th class="n">Zone</th><th class="n">The Full Picture</th><th class="n">Benchmark</th><th class="n">Indicator</th></tr></thead><tbody>';
+ ex.forEach(r=>{h+='<tr><td>'+esc(r.t)+'</td><td class="n">Recognized Strength</td><td class="n">'+f1(fp(r))+'</td><td class="n">'+f1(r.bm)+'</td><td class="n">'+IND.B+'</td></tr>'});
+ return h+'</tbody></table></div>';
+}
+// ---------- guide
+const STEPS=[
+ {label:"Start",title:"How to use this walkthrough",render:cover,
+  what:"This is a sample TTLP report for an invented participant. Nothing here is a real person or a real client. You will move through the six sections in the order they appear, with a note on what each one is for.",
+  look:[],how:"Use Next and Back, or jump to any step. Click a numbered point to highlight that part of the report. The Benchmark switch adds the benchmark to the sections that carry it.",
+  coach:"Walk through it once as a reader. Then walk through it again as the person who will sit across from the participant.",
+  reflect:"Before you start, which capacity do you expect to be strongest for a leader like this? Check your guess as you go."},
+ {label:"1 Overview",title:"Section 1: Participant Overview",render:overview,
+  what:"Section 1 tells you who answered, and gives an overall score for each capacity from each view and as The Full Picture.",
+  look:[["a1","Who answered: the invited and responded counts. Check these before you look at any score."],["a1b","The counts by view. A view with only a few raters is a few voices."],["a2","The capacity scores. Find the highest and the lowest capacity by The Full Picture."],["a3-2","Compare My Own View with the other views in one row. Here is Coaches Others."]],
+  coach:"Set the stage. Note the rater counts out loud before you open any score.",
+  reflect:"What would you want to know about who answered before you trusted a number?"},
+ {label:"2 Awareness Zones",title:"Section 2: Awareness Zones",render:zones,
+  what:"Section 2 sorts every behavior into one of four zones by comparing My Own View with The Full Picture. The two numbers are 5.0 and 1.25.",
+  look:[["z-R","Recognized Strengths: The Full Picture is 5.0 or higher and the views agree. Anchor it."],["z-U","Underestimated Strengths: others see a strength the participant does not. Help them see it."],["z-O","Overestimated Behaviors: My Own View is 1.25 or more above The Full Picture. Notice that some have a Full Picture above 5.0 and some below."],["z-G","Growth Priorities: The Full Picture is below 5.0 and the views agree. Work on it together."]],
+  coach:"A useful order for a debrief is Recognized, Underestimated, Growth, then Overestimated. Each zone calls for a different conversation.",
+  reflect:"Pick one Overestimated behavior. What might the people around the participant be experiencing that the participant is not?"},
+ {label:"3 Capacities & Clusters",title:"Section 3: Capacity & Cluster Summary",render:clusterSummary,
+  what:"Section 3 breaks each capacity into clusters, so a capacity score points to a theme instead of a general area.",
+  look:[["c1-2","Coaches Others is the lowest capacity. Look at its clusters to see which theme sits lowest."],["c1-0","Models the Way is the strongest capacity. Check which of its clusters sits furthest from the capacity score."],["c2-2-Accountability","Read across a cluster row. In this report My Team's View is lower than the other views."]],
+  coach:"Do not coach a capacity. Find the cluster, then the behaviors, then ask what the people on the other end are experiencing.",
+  reflect:"If this were your own report, which cluster would you look at first, and why?"},
+ {label:"4 Spotlight",title:"Section 4: Spotlight Items",render:spotlight,
+  what:"Section 4 lists the five highest-rated and five lowest-rated behaviors by The Full Picture. Each is tagged with its zone and cluster.",
+  look:[["d1","The highest five: this participant's most visible strengths."],["d2","The lowest five. Read the zone tag on each one."],["sp-33","This lowest-rated behavior is tagged Overestimated, not Growth Priority. That is a different conversation."]],
+  coach:"Lowest rated is not the same as Growth Priority. Always read the tag.",
+  reflect:"What would you ask the participant about the top five before you move to the lowest five?"},
+ {label:"5 Item Detail",title:"Section 5: Item Detail",render:itemDetail,
+  what:"Section 5 lists every behavior with the score from each view. Use it to find out what is behind a cluster score.",
+  look:[["e1-2-Accountability","Open Accountability under Coaches Others and see which behaviors pull it down."],["r-33","Find a behavior where My Own View is far from every other view. Here is Delegates effectively."],["e3","One behavior appears in two clusters. It is the same behavior, with the same scores, shown in both places."]],
+  coach:"Use the detail to check what you saw in the summaries. You do not need to read every line.",
+  reflect:"Where do you see the Leader's View and the Team's View telling different stories?"},
+ {label:"6 Comments",title:"Section 6: Open-Ended Commentary",render:comments,
+  what:"Section 6 shows what raters wrote in their own words, grouped by question and not attributed.",
+  look:[["f1","Look for themes that repeat across answers."],["fs","Notice the short answers. 'NA' and 'I do not work with Jordan closely enough to say' are information too."],["f3","Read what raters say should never be lost. It tells you what to protect while the participant grows."],["f4","The participant's own answer is included. Compare it with what the others wrote."]],
+  coach:"One comment is one voice. Do not build a conclusion on it, and do not try to work out who wrote it.",
+  reflect:"Which comment would you most want the participant to hear, and what would you ask first?"},
+ {label:"Benchmark",title:"The Benchmark",render:benchmark,
+  what:"The benchmark is a reference value from the top quartile of Team Trek's leadership 360 data. It adds a column and an indicator to Sections 1, 3, 4, and 5, and never to Awareness Zones or the comments. The switch at the top turns it on or off.",
+  look:[["g0","Where it appears, and where it does not."],["g1","Above, At, and Below. Below is amber, never red."],["g2","The capacity view with the benchmark on."],["g3","A behavior can be a Recognized Strength and still sit Below the benchmark. Both are true."]],
+  coach:"Introduce the benchmark after the zones, so the personal layer lands first. It is a wider lens, not a pass-fail line.",
+  reflect:"How would you explain a Recognized Strength that sits Below the benchmark to someone who just saw both?"}
+];
+let step=0;
+function goto(n){
+ step=Math.max(0,Math.min(STEPS.length-1,n)); const s=STEPS[step];
+ if(step===STEPS.length-1&&!BM){BM=true;$("bm").checked=true;}
+ $("steps").innerHTML=STEPS.map((x,i)=>'<button type="button" data-s="'+i+'" class="'+(i===step?'on':'')+'" aria-current="'+(i===step)+'">'+x.label+'</button>').join("");
+ let g='<h2>'+s.title+'</h2><p>'+s.what+'</p>';
+ if(s.how) g+='<p>'+s.how+'</p>';
+ if(s.look.length){g+='<p class="lab">Look at</p><ol>'+s.look.map(l=>'<li><button type="button" class="look" data-t="'+l[0]+'">'+l[1]+'</button></li>').join("")+'</ol>';}
+ g+='<p><span class="lab">For you as a coach.</span> '+s.coach+'</p><p><span class="lab">Reflect (not scored).</span> '+s.reflect+'</p>';
+ $("guide").innerHTML=g;
+ renderPage();
+ ["back1","back2"].forEach(i=>$(i).disabled=(step===0)); ["next1","next2"].forEach(i=>$(i).disabled=(step===STEPS.length-1));
+}
+function renderPage(){
+ $("page").innerHTML=STEPS[step].render();
+ const m=$("moreR"); if(m) m.onclick=()=>{document.querySelectorAll("#page .hid").forEach(e=>e.style.display="block");m.style.display="none"};
+ const ex=$("exp"); if(ex){ex.onclick=()=>document.querySelectorAll("#page details").forEach(d=>d.open=true);$("col").onclick=()=>document.querySelectorAll("#page details").forEach(d=>d.open=false)}
+}
+function hl(t){
+ document.querySelectorAll(".hl").forEach(e=>e.classList.remove("hl"));
+ const els=[...document.querySelectorAll("#page [data-hl]")].filter(e=>e.getAttribute("data-hl").split(" ").includes(t));
+ if(!els.length) return;
+ // reveal hidden items inside zones or closed details
+ els.forEach(e=>{e.classList.add("hl"); const d=e.closest("details"); if(d) d.open=true; });
+ els[0].scrollIntoView({behavior:"smooth",block:"center"});
+}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button"); if(!b) return;
+ if(b.dataset.s!==undefined) goto(+b.dataset.s);
+ else if(b.dataset.go) goto(+b.dataset.go);
+ else if(b.dataset.t) hl(b.dataset.t);
+});
+["back1","back2"].forEach(i=>$(i).onclick=()=>{goto(step-1);window.scrollTo(0,0)});
+["next1","next2"].forEach(i=>$(i).onclick=()=>{goto(step+1);window.scrollTo(0,0)});
+$("bm").onchange=e=>{BM=e.target.checked; renderPage();};
+goto(0);
+</script>
+</body>
+</html>
