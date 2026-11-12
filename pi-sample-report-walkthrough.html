@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Report Walkthrough: Personal Inventory</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:14px;font-family:Arial,Helvetica,sans-serif;color:#000;background:#fff;line-height:1.45;font-size:15px}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-size:21px;color:#0057C2;margin:0}
+.sub{color:#384867;font-size:13px;margin:2px 0 10px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.steps button{font-family:inherit;font-size:13px;padding:6px 9px;border:1px solid #003087;background:#fff;color:#003087;cursor:pointer}
+.steps button.on{background:#003087;color:#fff}
+.steps button:focus-visible,.nav button:focus-visible,.look:focus-visible,.link:focus-visible{outline:3px solid #0057C2;outline-offset:2px}
+.guide{background:#E3EBF5;border-left:4px solid #0057C2;padding:12px 16px;margin-bottom:12px}
+.guide h2{font-size:17px;color:#0057C2;margin:0 0 6px}
+.guide p{margin:0 0 8px;font-size:14px}
+.guide ol{margin:4px 0 10px;padding-left:22px}
+.guide li{margin:0 0 5px;font-size:14px}
+.look{font-family:inherit;font-size:14px;text-align:left;background:none;border:0;border-bottom:1px dashed #0057C2;color:#003087;cursor:pointer;padding:0}
+.look:hover{background:#fff}
+.lab{font-weight:bold;color:#0057C2}
+.nav{display:flex;justify-content:space-between;margin:10px 0}
+.nav button{font-family:inherit;font-size:14px;padding:9px 16px;border:1px solid #003087;background:#003087;color:#fff;cursor:pointer;font-weight:bold}
+.nav button:disabled{opacity:.35;cursor:default}
+.page{border:1px solid #D8D6DE;background:#fff}
+.rh{background:#003087;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:12px;letter-spacing:.3px}
+.pb{padding:16px}
+.sec{font-size:18px;color:#0057C2;margin:0 0 10px;border-bottom:2px solid #0057C2;padding-bottom:4px}
+h3{font-size:15px;color:#003087;margin:16px 0 6px}
+.ov{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 8px}
+th{background:#003087;color:#fff;text-align:left;padding:6px 8px;border:1px solid #D8D6DE;font-weight:bold}
+td{padding:6px 8px;border:1px solid #D8D6DE;vertical-align:top}
+tbody tr:nth-child(even) td{background:#E3EBF5}
+td.n,th.n{text-align:center}
+tr.tot td,tr.bh td{font-weight:bold}
+tr.bh td{background:#E3EBF5 !important;color:#003087}
+td.ind{padding-left:22px}
+.hl{outline:3px solid #0057C2;outline-offset:2px;background:#FFF9D6 !important}
+tr.hl td{background:#FFF9D6 !important}
+.sp{display:flex;justify-content:space-between;gap:10px;padding:7px 10px;border:1px solid #D8D6DE;margin:0 0 5px;font-size:13px;flex-wrap:wrap}
+.sp small{display:block;color:#384867}
+.cover{text-align:center;padding:22px 8px}
+.cover h2{font-size:26px;color:#003087;margin:6px 0}
+.cover p{margin:2px 0;color:#384867}
+.cover .big{font-size:34px;color:#003087;font-weight:bold;margin:12px 0 0}
+.cover ul{list-style:none;padding:0;margin:16px auto 0;max-width:460px;text-align:left}
+.cover li{margin:0 0 6px}
+.link{font-family:inherit;font-size:14px;background:none;border:0;color:#0057C2;text-decoration:underline;cursor:pointer;padding:0}
+.hint{font-size:12px;color:#384867;margin:4px 0}
+.box{border-left:4px solid #0057C2;background:#E3EBF5;padding:10px 14px;margin:8px 0;font-size:14px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+@media(max-width:560px){body{padding:8px}.pb{padding:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><h1>Sample Report Walkthrough: Personal Inventory</h1><p class="sub">An invented participant and invented scores, shown in the layout of a real report.</p></div>
+<div class="steps" id="steps" role="tablist"></div>
+<div class="guide" id="guide" aria-live="polite"></div>
+<div class="nav"><button id="back1" type="button">Back</button><button id="next1" type="button">Next</button></div>
+<div class="page"><div class="rh"><span>TEAM TREK &middot; PERSONAL INVENTORY &middot; PARTS 1 AND 2</span><span>Jordan Sample &middot; Sample Organization &middot; SAMPLE REPORT, INVENTED FOR TRAINING</span></div><div class="pb" id="page"></div></div>
+<div class="nav"><button id="back2" type="button">Back</button><button id="next2" type="button">Next</button></div>
+</div>
+<script>
+const D={"areas": [{"k": "mission", "n": "Mission", "items": [{"b": "100% Responsibility", "t": "I take responsibility for achieving expected results, with no excuses or blaming", "s": 8}, {"b": "Agile", "t": "I support and lead change", "s": 7}, {"b": "Emotional Self-Control", "t": "I seek the facts before reacting to a situation", "s": 7}, {"b": "Emotional Self-Control", "t": "I remain calm during stressful circumstances", "s": 6}, {"b": "Positive Attitude", "t": "I balance optimism combined with realism", "s": 7}, {"b": "Problem Solver", "t": "I make constructive recommendations for continuous improvement", "s": 8}, {"b": "Problem Solver", "t": "I act decisively once the facts are known", "s": 8}, {"b": "Problem Solver", "t": "I anticipate future problems and plan accordingly", "s": 6}, {"b": "Problem Solver", "t": "I move quickly to assess problems and find solutions", "s": 6}, {"b": "Resolves Conflict Directly", "t": "I speak up and share ideas and concerns", "s": 9}, {"b": "Team Player", "t": "I commit to team decisions", "s": 8}, {"b": "Team Player", "t": "I give my best effort toward the success of the mission or task", "s": 9}]}, {"k": "team", "n": "Team", "items": [{"b": "100% Responsibility", "t": "I take responsibility for how my behaviors impact others", "s": 7}, {"b": "Clear Communicator", "t": "I proactively share information with others", "s": 6}, {"b": "Clear Communicator", "t": "I replay important conversations to confirm understanding", "s": 5}, {"b": "Clear Communicator", "t": "I act with clear intent", "s": 8}, {"b": "Clear Communicator", "t": "I make clear and specific agreements with others", "s": 6}, {"b": "Emotional Self-Control", "t": "I maintain emotional self-control during conflict with others", "s": 6}, {"b": "Empathy", "t": "I seek to understand the perspective of others", "s": 9}, {"b": "Empathy", "t": "I actively listen for understanding", "s": 9}, {"b": "Humility", "t": "I show appreciation for the contributions of others", "s": 8}, {"b": "Positive Attitude", "t": "I persevere through adversity and change", "s": 7}, {"b": "Resolves Conflict Directly", "t": "I resolve conflict quickly, directly, and professionally", "s": 5}, {"b": "Respects Others", "t": "I treat other team members or colleagues with respect", "s": 9}, {"b": "Respects Others", "t": "I am punctual", "s": 8}, {"b": "Team Player", "t": "I collaborate with other team members to develop the best solutions", "s": 8}, {"b": "Trustworthy", "t": "I consistently speak well of others", "s": 8}, {"b": "Trustworthy", "t": "I show care and concern for team members", "s": 9}]}, {"k": "self", "n": "Self-Development", "items": [{"b": "100% Responsibility", "t": "I take responsibility for my own development", "s": 8}, {"b": "100% Responsibility", "t": "I admit mistakes and learn from them", "s": 7}, {"b": "Agile", "t": "I am an active learner", "s": 8}, {"b": "Agile", "t": "I demonstrate courage and take healthy risks", "s": 6}, {"b": "Humility", "t": "I seek constructive feedback", "s": 4}, {"b": "Humility", "t": "I act on feedback from others", "s": 4}, {"b": "Positive Attitude", "t": "I demonstrate self-confidence", "s": 7}, {"b": "Trustworthy", "t": "I keep commitments to self and others", "s": 8}, {"b": "Trustworthy", "t": "I act with honesty and integrity", "s": 8}, {"b": "Trustworthy", "t": "I model organizational values and purpose", "s": 7}]}], "oa": [{"t": "I often feel that what happens at work is mostly determined by other people, timing, or things outside my control.", "raw": 2}, {"t": "I frequently struggle to follow through with consistent action when it becomes difficult or I lack resources.", "raw": 3}, {"t": "When I face setbacks at work, I question whether I am in the right role.", "raw": 2}, {"t": "I'm usually confident that if something is truly important, I'll be able to handle it without needing to invest much time or effort in learning it first.", "raw": 6}, {"t": "I wait for my manager or organization to create opportunities rather than making them myself.", "raw": 3}, {"t": "When I don't feel heard, I tend to wait and see what happens rather than actively trying to change the situation.", "raw": 5}, {"t": "I often go along with what other people want to keep the peace rather than sticking to my own priorities when they conflict.", "raw": 5}], "we": [{"g": "Clarity", "t": "I have a clear understanding of the expectations and responsibilities for someone in my role.", "s": 6}, {"g": "Clarity", "t": "I understand how my role contributes to the organization's mission and purpose.", "s": 6}, {"g": "Clarity", "t": "I have the necessary tools and resources to perform in my role at a high level.", "s": 5}, {"g": "Clarity", "t": "I have the opportunity to utilize my natural strengths in my current role.", "s": 6}, {"g": "Growth", "t": "I am encouraged to grow personally and professionally.", "s": 5}, {"g": "Growth", "t": "I have regular opportunities for learning and professional development.", "s": 4}, {"g": "Growth", "t": "I receive regular feedback on my progress and performance.", "s": 3}, {"g": "Recognition and care", "t": "I am acknowledged for high-quality performance.", "s": 5}, {"g": "Recognition and care", "t": "I experience genuine care, appreciation and support from others.", "s": 5}, {"g": "Voice and team", "t": "My opinions are valued and considered in decision-making.", "s": 4}, {"g": "Voice and team", "t": "I work alongside teammates who are committed to delivering high-quality results.", "s": 6}, {"g": "Voice and team", "t": "I currently have and maintain strong relationships with my team members.", "s": 6}]};
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+const f1=x=>parseFloat(x.toFixed(1)).toFixed(1);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const all=[]; D.areas.forEach(a=>a.items.forEach(i=>all.push({...i,area:a.n})));
+const grand=mean(all.map(i=>i.s));
+D.oa.forEach(o=>o.fix=8-o.raw);
+const oaAvg=mean(D.oa.map(o=>o.fix)), weAvg=mean(D.we.map(w=>w.s));
+const aAvg=a=>mean(a.items.map(i=>i.s));
+const resp=n=>n===1?"1 (Strongly Disagree)":(n===7?"7 (Strongly Agree)":String(n));
+const sorted=all.map((r,i)=>({...r,i})).sort((a,b)=>b.s-a.s||a.i-b.i);
+const hi=sorted.slice(0,5), lo=sorted.slice(-5).reverse();
+function cover(){
+ return '<div class="cover"><p>TEAM TREK</p><h2>Personal Inventory</h2><p><b>Jordan Sample</b></p><p>Sample Organization</p><p>November 2026</p><p class="big" data-hl="cv">'+f1(grand)+' <span style="font-size:16px;font-weight:normal">out of 10</span></p><p style="font-size:13px">Part 1 grand total</p><p style="margin-top:10px">A sample report. The participant and every score are invented.</p><ul><li><button class="link" data-go="1">Overview</button></li><li><button class="link" data-go="2">Mission, Team, and Self-Development pages</button></li><li><button class="link" data-go="3">Part 2: Ownership and Agency</button></li><li><button class="link" data-go="4">Part 2: Work Environment</button></li></ul></div>';
+}
+function overview(){
+ let h='<h2 class="sec">Overview</h2><div class="box" data-hl="ov1">The 12 Behaviors, the 38 specific behaviors under them, and three areas: Mission, Team, and Self-Development. Accuracy depends on honesty. Rate who you are today, not who you aspire to be.</div>';
+ h+='<h3>Part 1 results</h3><div class="ov"><table><thead><tr><th>Result</th><th class="n">Score (1 to 10)</th></tr></thead><tbody><tr class="tot" data-hl="ov2"><td>Grand total</td><td class="n">'+f1(grand)+'</td></tr>';
+ D.areas.forEach(a=>{h+='<tr data-hl="ov3-'+a.k+'"><td>'+a.n+'</td><td class="n">'+f1(aAvg(a))+'</td></tr>'});
+ h+='</tbody></table></div><div class="cols"><div><h3>Top strengths</h3><div data-hl="ov4">';
+ h+=hi.map(r=>'<div class="sp"><div>'+esc(r.t)+'<small>'+esc(r.b)+' &middot; '+r.area+'</small></div><b>'+r.s+'</b></div>').join('');
+ h+='</div></div><div><h3>Growth opportunities</h3><div data-hl="ov5">'+lo.map(r=>'<div class="sp"><div>'+esc(r.t)+'<small>'+esc(r.b)+' &middot; '+r.area+'</small></div><b>'+r.s+'</b></div>').join('')+'</div></div></div>';
+ return h+'<p class="hint">Each list shows five items. When several items share the same score, the list can only show some of them.</p>';
+}
+function areaPages(){
+ let h='<h2 class="sec">Mission, Team, and Self-Development pages</h2><p class="hint">One page per area. Each behavior shows its average in that area, with the items under it.</p>';
+ D.areas.forEach(a=>{
+  h+='<h3 data-hl="ap-'+a.k+'">'+a.n+' &mdash; '+f1(aAvg(a))+' ('+a.items.length+' items)</h3><div class="ov"><table><thead><tr><th>Behavior and item</th><th class="n">Score</th></tr></thead><tbody>';
+  const seen=[]; a.items.forEach(i=>{if(seen.indexOf(i.b)<0) seen.push(i.b)});
+  seen.forEach(b=>{const g=a.items.filter(i=>i.b===b);
+   h+='<tr class="bh" data-hl="ab-'+a.k+'-'+b.replace(/\W/g,"")+'"><td>'+esc(b)+'</td><td class="n">'+f1(mean(g.map(i=>i.s)))+'</td></tr>';
+   g.forEach(i=>{h+='<tr data-hl="ai-'+i.t.replace(/\W/g,"").slice(0,18)+'"><td class="ind">'+esc(i.t)+'</td><td class="n">'+i.s+'</td></tr>'});});
+  h+='</tbody></table></div>';});
+ return h;
+}
+function oaPage(){
+ let h='<h2 class="sec">Part 2: Ownership and Agency</h2><p class="hint">Scale 1 to 7. A higher score always means stronger ownership.</p><div class="ov"><table data-hl="oa0"><thead><tr><th>Statement</th><th>Participant\'s answer</th><th class="n">Score</th></tr></thead><tbody>';
+ D.oa.forEach((o,i)=>{h+='<tr data-hl="oa-'+i+'"><td>'+esc(o.t)+'</td><td>'+resp(o.raw)+'</td><td class="n"><b>'+o.fix+'</b></td></tr>'});
+ return h+'<tr class="tot" data-hl="oaT"><td>Ownership and Agency score</td><td></td><td class="n">'+f1(oaAvg)+'</td></tr></tbody></table></div>';
+}
+function wePage(){
+ let h='<h2 class="sec">Part 2: Work Environment</h2><p class="hint">Scale 1 to 7. These items are positively worded and scored as answered. A higher number is a more supportive environment.</p><div class="ov"><table data-hl="we0"><thead><tr><th>Statement</th><th class="n">Score</th></tr></thead><tbody>';
+ D.we.forEach((w,i)=>{h+='<tr data-hl="we-'+i+'"><td>'+esc(w.t)+'</td><td class="n">'+w.s+'</td></tr>'});
+ return h+'<tr class="tot" data-hl="weT"><td>Work Environment score</td><td class="n">'+f1(weAvg)+'</td></tr></tbody></table></div>';
+}
+function together(){
+ let h='<h2 class="sec">Putting the sections side by side</h2><div class="ov"><table data-hl="tg0"><thead><tr><th>Lens</th><th>Section</th><th class="n">Score</th><th class="n">Scale</th></tr></thead><tbody>';
+ h+='<tr><td>Behavior</td><td>Part 1 grand total</td><td class="n">'+f1(grand)+'</td><td class="n">1 to 10</td></tr><tr><td>Mindset</td><td>Ownership and Agency</td><td class="n">'+f1(oaAvg)+'</td><td class="n">1 to 7</td></tr><tr><td>Environment</td><td>Work Environment</td><td class="n">'+f1(weAvg)+'</td><td class="n">1 to 7</td></tr></tbody></table></div>';
+ h+='<h3>Pairs worth a question</h3><div class="ov"><table><thead><tr><th>Part 1 or Part 2 item</th><th class="n">Score</th><th>What sits beside it</th></tr></thead><tbody>';
+ const sp=all.find(i=>i.t==="I speak up and share ideas and concerns"), v=D.oa[5], v2=D.oa[6], fb=all.find(i=>i.t==="I seek constructive feedback"), rf=D.we[6];
+ h+='<tr data-hl="tg1"><td>'+esc(sp.t)+' (Part 1)</td><td class="n">'+sp.s+' of 10</td><td>'+esc(v.t)+' (Part 2, '+v.fix+' of 7)</td></tr>';
+ h+='<tr data-hl="tg2"><td>'+esc(fb.t)+' (Part 1)</td><td class="n">'+fb.s+' of 10</td><td>'+esc(rf.t)+' (Work Environment, '+rf.s+' of 7)</td></tr>';
+ return h+'</tbody></table></div><p class="hint">The scales differ, so compare each score with the person\'s own other scores, not with a number from the other part.</p>';
+}
+const STEPS=[
+ {label:"Start",title:"How to use this walkthrough",render:cover,
+  what:"This is a sample Personal Inventory report for an invented participant. Nothing here is a real person or a real client. You will move through the report in the order it appears, with a note on what each part is for.",
+  look:[],how:"Use Next and Back, or jump to any step. Click a numbered point to highlight that part of the report.",
+  coach:"Walk through it once as a reader. Then walk through it again as the person who will sit across from the participant.",
+  reflect:"Before you start, which of the three areas do you expect to be highest for someone like this? Check your guess as you go."},
+ {label:"Overview",title:"The overview",render:overview,
+  what:"The overview opens with a short note on honesty, then the Part 1 grand total, the score for each area, and two lists of five items each: top strengths and growth opportunities.",
+  look:[["ov1","The note on honesty. It sets the frame before any number appears."],["ov2","The grand total. This is the participant's own baseline, and everything else is read against it."],["ov3-self","The three area scores. Compare them with each other and with the grand total."],["ov4","The five highest items. A place to begin, not the full picture."],["ov5","The five lowest items. Look for what they have in common."]],
+  coach:"Read every score against the baseline, not against 10. There is no norm group in the report.",
+  reflect:"What would the participant's first reaction be to the lowest five? What would you say first?"},
+ {label:"Area pages",title:"The Mission, Team, and Self-Development pages",render:areaPages,
+  what:"There is one page for each area. Each behavior shows its average in that area, with the items under it and their scores.",
+  look:[["ap-team","The Team page is the longest, with 16 items."],["ab-team-ClearCommunicator","A behavior row is the average of its items. Look at the items beneath before you draw a conclusion."],["ab-self-Humility","Humility appears here, in Self-Development. Look at the two items under it."],["ab-mission-ProblemSolver","One behavior with four items. Check whether the four agree with each other."]],
+  coach:"The same behavior can show different numbers on different pages, because its items sit in different areas. When one is high on one page and lower on another, read the items first.",
+  reflect:"Pick a behavior that appears on two pages. What might explain a difference between the pages?"},
+ {label:"Ownership and Agency",title:"Part 2: Ownership and Agency",render:oaPage,
+  what:"Seven items, on a 1 to 7 scale. The report shows the score for each one, and a higher score always means stronger ownership.",
+  look:[["oa-0","Read the score. Here the participant scores 6, which is strong ownership on this item."],["oa-3","This item tests how a person meets something hard that is new. A score of 2 is the lowest in this section."],["oa-5","Two items on voice and keeping the peace sit low, next to the growth mindset item."],["oaT","The section score, on a 1 to 7 scale."]],
+  coach:"Read the score and talk about the pattern. The report has already done the math, so a higher number always means stronger ownership.",
+  reflect:"Which of these seven would be hardest for you to answer honestly?"},
+ {label:"Work Environment",title:"Part 2: Work Environment",render:wePage,
+  what:"Twelve items on a 1 to 7 scale, scored as answered. A higher number is a more supportive environment.",
+  look:[["we-6","The lowest item in this sample. Regular feedback on progress."],["we0","Each item shows the statement and its score, with no group names. The report lists the items one at a time."],["weT","A comfortable average can hide a quiet low item. Read the items one at a time."]],
+  coach:"Ask which items the person would change, then ask which of those they can influence themselves. Do not turn this into a complaint about a manager.",
+  reflect:"Whose lever is it: the person's, a manager's, or the organization's?"},
+ {label:"Side by side",title:"Reading the sections together",render:together,
+  what:"No section stands alone. Behavior, mindset, and environment give three views of one person, and the questions come from where they line up or pull apart.",
+  look:[["tg0","Three lenses, two scales. Do not compare the numbers across scales."],["tg1","A high Part 1 score on speaking up beside lower Part 2 scores on voice. Both can be honest."],["tg2","A lower score on seeking feedback beside a lower score on receiving feedback. The two point the same way."]],
+  coach:"Offer a pattern as an observation, then ask whether it fits. Never hand it over as a conclusion.",
+  reflect:"Where would you start with Jordan, and what would you ask first?"}
+];
+let step=0;
+function goto(n){
+ step=Math.max(0,Math.min(STEPS.length-1,n)); const s=STEPS[step];
+ $("steps").innerHTML=STEPS.map((x,i)=>'<button type="button" data-s="'+i+'" class="'+(i===step?'on':'')+'" aria-current="'+(i===step)+'">'+x.label+'</button>').join("");
+ let g='<h2>'+s.title+'</h2><p>'+s.what+'</p>'; if(s.how) g+='<p>'+s.how+'</p>';
+ if(s.look.length) g+='<p class="lab">Look at</p><ol>'+s.look.map(l=>'<li><button type="button" class="look" data-t="'+l[0]+'">'+l[1]+'</button></li>').join("")+'</ol>';
+ g+='<p><span class="lab">For you as a coach.</span> '+s.coach+'</p><p><span class="lab">Reflect (not scored).</span> '+s.reflect+'</p>';
+ $("guide").innerHTML=g; $("page").innerHTML=s.render();
+ ["back1","back2"].forEach(i=>$(i).disabled=(step===0)); ["next1","next2"].forEach(i=>$(i).disabled=(step===STEPS.length-1));
+}
+function hl(t){
+ document.querySelectorAll(".hl").forEach(e=>e.classList.remove("hl"));
+ const els=[...document.querySelectorAll("#page [data-hl]")].filter(e=>e.getAttribute("data-hl")===t||e.getAttribute("data-hl").indexOf(t)===0&&t.length>6);
+ if(!els.length) return; els.forEach(e=>e.classList.add("hl")); els[0].scrollIntoView({behavior:"smooth",block:"center"});
+}
+document.addEventListener("click",e=>{const b=e.target.closest("button"); if(!b) return;
+ if(b.dataset.s!==undefined) goto(+b.dataset.s); else if(b.dataset.go) goto(+b.dataset.go); else if(b.dataset.t) hl(b.dataset.t);});
+["back1","back2"].forEach(i=>$(i).onclick=()=>{goto(step-1);window.scrollTo(0,0)});
+["next1","next2"].forEach(i=>$(i).onclick=()=>{goto(step+1);window.scrollTo(0,0)});
+goto(0);
+</script>
+</body>
+</html>
